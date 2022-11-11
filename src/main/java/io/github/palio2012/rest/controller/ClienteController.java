@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping ("api/repository")
+@RequestMapping ("api/clientes")
 public class ClienteController {
 
     private Clientes repository;
