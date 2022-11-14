@@ -1,5 +1,6 @@
 package io.github.palio2012.domain.entities;
 
+import io.github.palio2012.domain.enums.StatusPedido;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,10 @@ public class Pedido {
 
     @Column (name = "total", precision = 20, scale = 2)
     private BigDecimal total;
+
+    @Enumerated (EnumType.STRING)
+    @Column (name = "status")
+    private StatusPedido status;
 
     @OneToMany (mappedBy = "pedido")
     private List <ItemPedido> itens;

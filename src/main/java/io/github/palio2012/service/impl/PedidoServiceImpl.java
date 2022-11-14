@@ -5,6 +5,7 @@ import io.github.palio2012.domain.entities.Cliente;
 import io.github.palio2012.domain.entities.ItemPedido;
 import io.github.palio2012.domain.entities.Pedido;
 import io.github.palio2012.domain.entities.Produto;
+import io.github.palio2012.domain.enums.StatusPedido;
 import io.github.palio2012.domain.respository.Clientes;
 import io.github.palio2012.domain.respository.ItensPedido;
 import io.github.palio2012.domain.respository.Pedidos;
@@ -43,6 +44,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
 
         List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());

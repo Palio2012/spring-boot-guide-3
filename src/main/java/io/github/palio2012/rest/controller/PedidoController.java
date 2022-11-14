@@ -3,6 +3,7 @@ package io.github.palio2012.rest.controller;
 import io.github.palio2012.domain.entities.ItemPedido;
 import io.github.palio2012.domain.entities.Pedido;
 
+import io.github.palio2012.domain.enums.StatusPedido;
 import io.github.palio2012.rest.dto.InformacaoItemPedidoDTO;
 import io.github.palio2012.rest.dto.InformacoesPedidoDTO;
 import io.github.palio2012.rest.dto.PedidoDTO;
@@ -53,6 +54,7 @@ public class PedidoController {
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .total(pedido.getTotal())
+                .status(pedido.getStatus().name())
                 .items(converter(pedido.getItens()))
                 .build();
     }
