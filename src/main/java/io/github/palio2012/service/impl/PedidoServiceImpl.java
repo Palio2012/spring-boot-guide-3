@@ -10,6 +10,7 @@ import io.github.palio2012.domain.respository.Clientes;
 import io.github.palio2012.domain.respository.ItensPedido;
 import io.github.palio2012.domain.respository.Pedidos;
 import io.github.palio2012.domain.respository.Produtos;
+import io.github.palio2012.exceptions.PedidoNaoEncontradoException;
 import io.github.palio2012.exceptions.RegraNegocioException;
 import io.github.palio2012.rest.dto.ItemPedidoDTO;
 import io.github.palio2012.rest.dto.PedidoDTO;
@@ -59,6 +60,15 @@ public class PedidoServiceImpl implements PedidoService {
         return repository.findByIdFetchItens(id);
     }
 
+    @Override
+    @Transactional
+    public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+        repository.findById(id)
+                .map( pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return repository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException());
+    }
 
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items){

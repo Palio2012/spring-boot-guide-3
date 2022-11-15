@@ -4,6 +4,7 @@ import io.github.palio2012.domain.entities.ItemPedido;
 import io.github.palio2012.domain.entities.Pedido;
 
 import io.github.palio2012.domain.enums.StatusPedido;
+import io.github.palio2012.rest.dto.AtualizacaoStatusPedidoDTO;
 import io.github.palio2012.rest.dto.InformacaoItemPedidoDTO;
 import io.github.palio2012.rest.dto.InformacoesPedidoDTO;
 import io.github.palio2012.rest.dto.PedidoDTO;
@@ -32,21 +33,30 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer save( @RequestBody PedidoDTO dto ){
+    public Integer save(@RequestBody PedidoDTO dto) {
         Pedido pedido = service.salvar(dto);
         return pedido.getId();
     }
 
     @GetMapping("{id}")
-    public InformacoesPedidoDTO getById( @PathVariable Integer id ){
+    public InformacoesPedidoDTO getById(@PathVariable Integer id) {
         return service
                 .obterPedidoCompleto(id)
-                .map( p -> converter(p) )
+                .map(p -> converter(p))
                 .orElseThrow(() ->
                         new ResponseStatusException(NOT_FOUND, "Pedido não encontrado."));
     }
 
-    private InformacoesPedidoDTO converter(Pedido pedido){
+    @PatchMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void updateStatus(@PathVariable Integer id,
+                             @RequestBody AtualizacaoStatusPedidoDTO dto) {
+        String novoStatus = dto.getNovoStatus();
+        service.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
+
+    }
+
+    private InformacoesPedidoDTO converter(Pedido pedido) {
         return InformacoesPedidoDTO
                 .builder()
                 .codigo(pedido.getId())
@@ -59,8 +69,8 @@ public class PedidoController {
                 .build();
     }
 
-    private List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens){
-        if(CollectionUtils.isEmpty(itens)){
+    private List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens) {
+        if (CollectionUtils.isEmpty(itens)) {
             return Collections.emptyList();
         }
         return itens.stream().map(
